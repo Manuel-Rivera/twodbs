@@ -26,7 +26,7 @@ transactionManagerRef = "postgresTransactionManager",
 basePackages = {"com.twodbs.demo.repository.postgres"}
 )
 public class PostgresDB {
-    @Value("${postgres.jpa.database-plataform}")
+    @Value("${postgres.jpa.database-platform}")
     private String dialect;
     
     @Bean(name = "postgresDataSource")

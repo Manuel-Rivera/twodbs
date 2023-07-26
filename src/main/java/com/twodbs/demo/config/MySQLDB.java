@@ -28,7 +28,7 @@ transactionManagerRef = "mysqlTransactionManager",
 basePackages = {"com.twodbs.demo.repository.mysql"}
 )
 public class MySQLDB {
-    @Value("${mysql.jpa.database-plataform}")
+    @Value("${mysql.jpa.database-platform}")
     private String dialect;
     
     @Primary
