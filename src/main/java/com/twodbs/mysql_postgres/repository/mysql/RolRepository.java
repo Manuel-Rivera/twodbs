@@ -9,8 +9,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class RolRepository implements  IRol{
 
-    @Autowired
-    private JdbcTemplate mysqlJdbcTemplate;
+    private final JdbcTemplate mysqlJdbcTemplate;
+
+    public RolRepository(JdbcTemplate mysqlJdbcTemplate) {
+        this.mysqlJdbcTemplate = mysqlJdbcTemplate;
+    }
+
     @Override
     public RolUserDTO findUserRol(Integer id) {
         RolUserDTO roluser = mysqlJdbcTemplate.queryForObject("select * from rol_usuario where id_rol=?", BeanPropertyRowMapper.newInstance(RolUserDTO.class),id);
