@@ -15,6 +15,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -43,6 +45,17 @@ public class MySQLDB {
         return DataSourceBuilder.create().build();
     }
 
+    //Mysql JDBC Template
+    @Bean(name = "mysqlJdbcTemplate")
+    public JdbcTemplate mysqlJdbcTemplate(@Qualifier("mysqlDataSource") DataSource dataSource){
+        return new JdbcTemplate(dataSource);
+    }
+    @Bean(name = "mysqlNamedParameterJdbcTemplate")
+    public NamedParameterJdbcTemplate mysqlNamedParameterJdbcTemplate(@Qualifier("mysqlDataSource") DataSource dataSource){
+        return new NamedParameterJdbcTemplate(dataSource);
+    }
+
+    //mysql configuration from hibernate
     @Primary
     @Bean(name = "mysqlEntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean(@Qualifier("mysqlDataSource") DataSource dataSource){

@@ -14,12 +14,4 @@ public class RolUsuario {
 
     @Column(name = "ROL_DESCRIPTION")
     private String rol;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 }
