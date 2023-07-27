@@ -1,5 +1,4 @@
-package com.twodbs.demo.config;
-
+package com.twodbs.mysql_postgres.config;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -25,52 +24,50 @@ import jakarta.persistence.EntityManagerFactory;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories( entityManagerFactoryRef = "mysqlEntityManagerFactory",
-transactionManagerRef = "mysqlTransactionManager",
-basePackages = {"com.twodbs.demo.repository.mysql"}
+@EnableJpaRepositories( entityManagerFactoryRef = "postgresEntityManagerFactory",
+        transactionManagerRef = "postgresTransactionManager",
+        basePackages = {"com.twodbs.mysql_postgres.repository.postgres"}
 )
-public class MySQLDB {
+public class PostgresDB {
     private final Environment env;
 
-    public MySQLDB(Environment env) {
+    public PostgresDB(Environment env) {
         this.env = env;
     }
 
-    @Primary
-    @Bean(name = "mysqlDataSource")
-    @ConfigurationProperties(prefix = "mysql.datasource")
+    @Bean(name = "postgresDataSource")
+    @ConfigurationProperties(prefix = "postgres.datasource")
     public DataSource dataSource(){
         return DataSourceBuilder.create().build();
     }
 
-    @Primary
-    @Bean(name = "mysqlEntityManagerFactory")
-    public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean(@Qualifier("mysqlDataSource") DataSource dataSource){
+    @Bean(name = "postgresEntityManagerFactory")
+    public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean(@Qualifier("postgresDataSource") DataSource dataSource){
         //Add configuration session
         HikariDataSource hirakiDataSource = new HikariDataSource();
-        hirakiDataSource.setMaximumPoolSize(Integer.parseInt(Objects.requireNonNull(env.getProperty("mysql.hikari.maximum-pool-size"))));
-        hirakiDataSource.setConnectionTimeout(Long.parseLong(Objects.requireNonNull(env.getProperty("mysql.hikari.connection-timeout"))));
-        hirakiDataSource.setIdleTimeout(Long.parseLong(Objects.requireNonNull(env.getProperty("mysql.hikari.idle-timeout"))));
+        hirakiDataSource.setMaximumPoolSize(Integer.parseInt(Objects.requireNonNull(env.getProperty("postgres.hikari.maximum-pool-size"))));
+        hirakiDataSource.setConnectionTimeout(Long.parseLong(Objects.requireNonNull(env.getProperty("postgres.hikari.connection-timeout"))));
+        hirakiDataSource.setIdleTimeout(Long.parseLong(Objects.requireNonNull(env.getProperty("postgres.hikari.idle-timeout"))));
 
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
 
         factoryBean.setDataSource(hirakiDataSource);
         factoryBean.setDataSource(dataSource);
 
-        factoryBean.setPackagesToScan("com.twodbs.demo.entity.mysql");
+        factoryBean.setPackagesToScan("com.twodbs.mysql_postgres.entity.postgres");
         HibernateJpaVendorAdapter vendor=new HibernateJpaVendorAdapter();
         factoryBean.setJpaVendorAdapter(vendor);
         Map<String,Object> properties = new HashMap<>();
-        properties.put("hibernate.dialect", env.getProperty("mysql.hibernate.dialect"));
-        properties.put("hibernate.hbm2ddl.auto",env.getProperty("mysql.hibernate.hbm2ddl.auto"));
-        properties.put("hibernate.show_sql",env.getProperty("mysql.hibernate.show_sql"));
-        properties.put("hibernate.format_sql",env.getProperty("mysql.hibernate.format_sql"));
+        properties.put("hibernate.dialect", env.getProperty("postgres.hibernate.dialect"));
+        properties.put("hibernate.hbm2ddl.auto",env.getProperty("postgres.hibernate.hbm2ddl.auto"));
+        properties.put("hibernate.show_sql",env.getProperty("postgres.hibernate.show_sql"));
+        properties.put("hibernate.format_sql",env.getProperty("postgres.hibernate.format_sql"));
         factoryBean.setJpaPropertyMap(properties);
         return factoryBean;
     }
     @Primary
-    @Bean(name = "mysqlTransactionManager")
-    public PlatformTransactionManager platformTransactionManager(@Qualifier("mysqlEntityManagerFactory") EntityManagerFactory entityManagerFactory){
+    @Bean(name = "postgresTransactionManager")
+    public PlatformTransactionManager platformTransactionManager(@Qualifier("postgresEntityManagerFactory") EntityManagerFactory entityManagerFactory){
         return new JpaTransactionManager(entityManagerFactory);
     }
 }

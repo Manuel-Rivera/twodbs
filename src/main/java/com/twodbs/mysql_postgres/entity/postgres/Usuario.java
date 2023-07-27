@@ -1,4 +1,4 @@
-package com.twodbs.demo.entity.postgres;
+package com.twodbs.mysql_postgres.entity.postgres;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

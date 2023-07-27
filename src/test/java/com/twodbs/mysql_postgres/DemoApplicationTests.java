@@ -1,4 +1,4 @@
-package com.twodbs.demo;
+package com.twodbs.mysql_postgres;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

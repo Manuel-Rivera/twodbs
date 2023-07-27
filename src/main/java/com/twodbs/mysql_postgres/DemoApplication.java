@@ -1,4 +1,4 @@
-package com.twodbs.demo;
+package com.twodbs.mysql_postgres;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
